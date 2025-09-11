@@ -15,7 +15,6 @@ import { Product } from "./product";
 import { paymentOptions, SellFormProps } from "@/types/pdv";
 import { useDbStore } from "@/store/db-store";
 import { usePdvStore } from "@/store/pdv-store";
-import { generatePDF } from "@/services/pdv/generatePdf";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
 
 export const SellForm = ({ onEditQuantity }: SellFormProps) => {
@@ -31,9 +30,9 @@ export const SellForm = ({ onEditQuantity }: SellFormProps) => {
   const troco =
     totalPayment >= total
       ? Math.max(0, totalPayment - total).toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
       : "0,00";
 
   useEffect(() => {
@@ -59,6 +58,7 @@ export const SellForm = ({ onEditQuantity }: SellFormProps) => {
     //window.open(pdfUrl, "_blank");
 
     const saleId = await insertSale(db, total, selectedPayment.toString(), now);
+
     await insertSaleItemsAndUpdateStock(db, saleId, cart, now);
 
     setCart([]);

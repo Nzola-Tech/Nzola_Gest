@@ -55,7 +55,7 @@ export async function productsSoldToday(db: Database | null) {
      FROM sale_items si
      JOIN sales s ON s.id = si.sale_id
      WHERE DATE(si.created_at) = ?`,
-    [today]
+    [today],
   );
 
   if (!result || result.length === 0) return 0;
@@ -70,9 +70,9 @@ export async function totalSalesToday(db: Database | null) {
     `SELECT COALESCE(SUM(total), 0) as totalToday
      FROM sales
      WHERE DATE(created_at) = ?`,
-    [today]
+    [today],
   );
-  
+
   if (!result || result.length === 0) return 0;
 
   return result[0].totalToday;
@@ -132,9 +132,11 @@ export const handleSubmit = async (
 export const existingCompany = async (db: Database | null) => {
   if (!db) return false;
   const company = await db?.select<Company[]>("SELECT * FROM company");
+
   if (company.length > 0) return true;
+
   return false;
-}
+};
 
 export const insertCompany = async (db: Database | null, company: Company) => {
   if (!db) return [];
@@ -142,5 +144,6 @@ export const insertCompany = async (db: Database | null, company: Company) => {
     "INSERT INTO company (name, nif, email, phone, location) VALUES ($1, $2, $3, $4, $5)",
     [company.name, company.nif, company.email, company.phone, company.location],
   );
+
   return result;
-}
+};

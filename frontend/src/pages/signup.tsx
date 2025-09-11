@@ -66,59 +66,55 @@ export default function CompanySignup() {
         <form className="flex flex-col gap-y-4" onSubmit={handleSignup}>
           <Input
             required
+            classNames={{
+              inputWrapper: "dark:bg-gray-700",
+              label: "dark:text-gray-300",
+            }}
             label="Nome da Empresa"
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            required
             classNames={{
               inputWrapper: "dark:bg-gray-700",
               label: "dark:text-gray-300",
             }}
-          />
-          <Input
-            required
             label="NIF"
             value={nif}
             onChange={(e) => setNif(e.target.value)}
+          />
+          <Input
+            required
             classNames={{
               inputWrapper: "dark:bg-gray-700",
               label: "dark:text-gray-300",
             }}
-          />
-          <Input
-            required
             label="Telefone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            classNames={{
-              inputWrapper: "dark:bg-gray-700",
-              label: "dark:text-gray-300",
-            }}
           />
           <Input
-            type="email"
-            label="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             classNames={{
               inputWrapper: "dark:bg-gray-700",
               label: "dark:text-gray-300",
             }}
+            label="E-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             required
-            label="Endereço"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
             classNames={{
               inputWrapper: "dark:bg-gray-700",
               label: "dark:text-gray-300",
             }}
+            label="Endereço"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
           />
-          <Button
-            className="w-full"
-            color="primary"
-            type="submit"
-          >
+          <Button className="w-full" color="primary" type="submit">
             Cadastrar
           </Button>
         </form>

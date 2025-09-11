@@ -6,10 +6,10 @@ import {
 } from "@heroui/dropdown";
 import { User } from "@heroui/user";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import { useAuthStore } from "@/store/auth-store";
 import { useDbStore } from "@/store/db-store";
-import { useEffect, useState } from "react";
 import { existingCompany } from "@/database";
 
 export const UserIcon = () => {
@@ -17,11 +17,11 @@ export const UserIcon = () => {
   const { logout, user } = useAuthStore();
   const [existCompany, setExistCompany] = useState<boolean>(false);
   const navigate = useNavigate();
+
   function handleLogout() {
     logout();
     navigate("/");
   }
-
 
   function handleLogin() {
     navigate("/login");
@@ -30,9 +30,11 @@ export const UserIcon = () => {
   useEffect(() => {
     const checkCompany = async () => {
       const exists = await existingCompany(db);
+
       if (exists) return setExistCompany(true);
       setExistCompany(false);
     };
+
     checkCompany();
   }, [db]);
 

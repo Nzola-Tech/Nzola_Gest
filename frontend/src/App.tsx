@@ -14,10 +14,10 @@ import Login from "./pages/login";
 import { useDbStore } from "./store/db-store";
 import { useAuthStore } from "./store/auth-store";
 import { ProtectedRoute } from "./components/protectRoute";
-
-import Home from "@/pages/index";
 import Signup from "./pages/signup";
 import UserManagement from "./pages/users";
+
+import Home from "@/pages/index";
 
 function App() {
   const navigate = useNavigate();
@@ -82,9 +82,7 @@ function App() {
           />
           <Route
             element={
-              <ProtectedRoute
-                allowedTypes={["admin", "user"]}
-              >
+              <ProtectedRoute allowedTypes={["admin", "user"]}>
                 <VendasPdv />
               </ProtectedRoute>
             }

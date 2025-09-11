@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Store } from "@tauri-apps/plugin-store";
-import { useDbStore } from "./db-store";
-import { User } from "@/types/signup/index"
 import bcrypt from "bcryptjs";
+
+import { useDbStore } from "./db-store";
+
+import { User } from "@/types/signup/index";
 
 interface AuthState {
   user: Pick<User, "id" | "username" | "role" | "status"> | null;
@@ -30,12 +32,13 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (userData) => {
         const db = useDbStore.getState().db;
+
         if (!db) throw new Error("Banco de dados não inicializado");
 
         // Busca apenas o hash da senha para o username fornecido
         const pwdb = await db.select<User[]>(
           "SELECT password FROM users WHERE username = ?",
-          [userData.username]
+          [userData.username],
         );
 
         if (pwdb.length === 0) {
@@ -46,6 +49,7 @@ export const useAuthStore = create<AuthState>()(
 
         // Compara senha digitada com hash do banco
         const match = await bcrypt.compare(userData.password, hashArmazenado);
+
         if (!match) {
           throw new Error("Usuário ou senha inválidos");
         }
@@ -53,7 +57,7 @@ export const useAuthStore = create<AuthState>()(
         // Agora busca todos os dados do usuário
         const user = await db.select<User[]>(
           "SELECT * FROM users WHERE username = ?",
-          [userData.username]
+          [userData.username],
         );
 
         if (user.length === 1) {

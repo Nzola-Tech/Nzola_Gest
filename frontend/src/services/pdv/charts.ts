@@ -7,7 +7,9 @@ export interface DailyProductSales {
   sale_date: string;
 }
 
-export async function getTop10ProductsByDay(db: Database): Promise<DailyProductSales[]> {
+export async function getTop10ProductsByDay(
+  db: Database,
+): Promise<DailyProductSales[]> {
   const hoje = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
 
   const result = await db.select<DailyProductSales[]>(
@@ -23,8 +25,9 @@ export async function getTop10ProductsByDay(db: Database): Promise<DailyProductS
         GROUP BY p.id, DATE(s.created_at)
         ORDER BY total_quantity DESC
         LIMIT 10
-    `, [hoje]);
+    `,
+    [hoje],
+  );
 
   return result;
 }
-

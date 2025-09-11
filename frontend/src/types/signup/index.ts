@@ -12,4 +12,4 @@ export interface User {
   updated_at?: Date;
 }
 
-export const userRoles: UserRole[] = ["admin", "user", "manager"]
+export const userRoles: UserRole[] = ["admin", "user", "manager"];

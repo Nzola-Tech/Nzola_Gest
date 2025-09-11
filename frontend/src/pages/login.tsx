@@ -22,21 +22,21 @@ export default function Login() {
         addToast({
           title: "Login realizado!",
           variant: "solid",
-          color: "success"
+          color: "success",
         });
         navigate("/");
       } else {
         addToast({
           title: "Usuário ou senha inválidos",
           variant: "solid",
-          color: "warning"
+          color: "warning",
         });
       }
     } catch (err) {
       addToast({
         title: "Erro ao fazer login",
         variant: "solid",
-        color: "warning"
+        color: "warning",
       });
     }
   };
@@ -51,16 +51,16 @@ export default function Login() {
             required
             label="Usuário"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
             variant="bordered"
+            onChange={(e) => setUsername(e.target.value)}
           />
           <Input
             required
             label="Senha"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
             variant="bordered"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button className="w-full" color="primary" type="submit">
             Entrar

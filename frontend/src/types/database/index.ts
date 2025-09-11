@@ -8,7 +8,6 @@ export type DbContextType = {
   refreshProducts: () => Promise<void>;
 };
 
-
 export type Company = {
   id?: number;
   name: string;
@@ -16,4 +15,4 @@ export type Company = {
   email: string;
   phone: string;
   location: string;
-}
+};

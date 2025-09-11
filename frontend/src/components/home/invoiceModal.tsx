@@ -4,12 +4,13 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from "@heroui/modal";
+import { Button } from "@heroui/button";
+
 import { Sale, SaleItem } from "@/types/pdv";
 import { generatePDF } from "@/services/pdv/generatePdf";
 import { CartItem } from "@/types/pdv";
-import { Button } from "@heroui/button";
 
 interface InvoiceModalProps {
   isOpen: boolean;
@@ -39,7 +40,7 @@ export default function InvoiceModal({
         fatura.total,
         fatura.payment_method,
         fatura.id.toString(),
-        { name: "Cliente Genérico" } // depois pode puxar cliente real
+        { name: "Cliente Genérico" }, // depois pode puxar cliente real
       );
 
       setPdfUrl(pdf);
@@ -47,16 +48,16 @@ export default function InvoiceModal({
   }, [fatura]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+    <Modal isOpen={isOpen} size="4xl" onClose={onClose}>
       <ModalContent>
         <ModalHeader>Fatura Nº {fatura?.id}</ModalHeader>
         <ModalBody>
           {pdfUrl ? (
             <iframe
-              src={pdfUrl}
-              width="100%"
               height="500px"
+              src={pdfUrl}
               style={{ border: "none" }}
+              width="100%"
             />
           ) : (
             <p>Gerando fatura...</p>

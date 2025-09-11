@@ -17,8 +17,9 @@ export async function getMonthlySales(db: Database): Promise<MonthlySales[]> {
      FROM sales
      WHERE created_at >= date('now', '-6 months')
      GROUP BY strftime('%m', created_at)
-     ORDER BY mes ASC`
+     ORDER BY mes ASC`,
   );
+
   return result as MonthlySales[];
 }
 
@@ -28,8 +29,9 @@ export async function getExpenses(db: Database): Promise<Expense[]> {
     `SELECT category as tipo, SUM(amount) as valor
      FROM expenses
      WHERE created_at >= date('now','start of month')
-     GROUP BY category`
+     GROUP BY category`,
   );
+
   return result as Expense[];
 }
 
@@ -43,7 +45,8 @@ export async function getTopProductsThisMonth(db: Database) {
      WHERE strftime('%m', s.created_at) = strftime('%m','now')
      GROUP BY p.id
      ORDER BY total_quantity DESC
-     LIMIT 10`
+     LIMIT 10`,
   );
+
   return result as { product_name: string; total_quantity: number }[];
 }
