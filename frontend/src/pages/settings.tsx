@@ -1,11 +1,11 @@
 import DefaultLayout from "@/layouts/default";
 
-export default function BeckupSeguranca() {
+export default function Settings() {
   return (
     <>
       <DefaultLayout>
         <h1 className="dark:text-white text-4xl text-center font-bold">
-          Beckup e Seguranca
+          Configurações
         </h1>
       </DefaultLayout>
     </>

@@ -1,5 +1,4 @@
-import NavBar from "@/components/navbar";
-
+import SideBar from "@/components/sidebar";
 export default function DefaultLayout({
   children,
 }: {
@@ -7,9 +6,13 @@ export default function DefaultLayout({
 }) {
   return (
     <>
-      <NavBar />
       <div className="relative flex flex-col">
-        <main className="container w-full px-3 flex-grow">{children}</main>
+        <main className="container w-full grid grid-cols-12">
+          <SideBar />
+          <div className="col-span-10 pt-4">
+            {children}
+          </div>
+        </main>
       </div>
     </>
   );

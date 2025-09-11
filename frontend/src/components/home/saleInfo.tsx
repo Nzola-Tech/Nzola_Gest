@@ -30,7 +30,7 @@ export default function SaleInfo({
   );
 
   return (
-    <div className="w-full grid grid-rows-1 grid-cols-4 gap-4 py-4">
+    <div className="w-full grid grid-rows-1 grid-cols-4 gap-4 pb-4">
       <div className="group flex items-center gap-4 p-2 bg-white dark:bg-default-100 rounded-lg shadow-md hover:bg-success-500 dark:hover:bg-success-500 transition-colors">
         <BanknotesIcon className="size-16 text-success-500 group-hover:text-white" />
         <div>

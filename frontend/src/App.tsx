@@ -8,7 +8,7 @@ import Clientes from "./pages/clientes";
 import Estoque from "./pages/estoque";
 import VendasPdv from "./pages/pdv";
 import Financas from "./pages/financas";
-import BeckupSeguranca from "./pages/backup-seguranca";
+import Settings from "./pages/settings"; "./pages/settings";
 import { ContextProvider } from "./components/contextProvider";
 import Login from "./pages/login";
 import { useDbStore } from "./store/db-store";
@@ -96,7 +96,7 @@ function App() {
             }
             path="/financas"
           />
-          <Route element={<BeckupSeguranca />} path="/backup-seguranca" />
+          <Route element={<Settings />} path="/settings" />
         </Routes>
       </HeroUIProvider>
     </ContextProvider>

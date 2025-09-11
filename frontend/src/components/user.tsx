@@ -40,51 +40,42 @@ export const UserIcon = () => {
 
   return (
     <Dropdown placement="bottom-start">
-      <DropdownTrigger>
+      <DropdownTrigger className="bg-transparent">
         <User
           as="button"
           avatarProps={{
-            isBordered: true,
             src: "",
+            size: "sm",
+            isBordered:true
           }}
           className="transition-transform"
-          description={`${user?.username || "Guest"}`}
-          name={user?.username}
+          description={``}
+          name={``}
         />
       </DropdownTrigger>
-      <DropdownMenu aria-label="User Actions" variant="flat">
-        <DropdownItem key="profile" className="h-14 gap-2">
-          <p className="font-bold">Signed in as</p>
-          <p className="font-bold">{`@${user?.username || "Guest"}`}</p>
-        </DropdownItem>
-        {user ? (
-          <DropdownItem key="vendas">
-            <Link to="/vendas">Vendas</Link>
-          </DropdownItem>
-        ) : (
-          <></>
-        )}
+      <DropdownMenu aria-label="User Actions" variant="light">
+        
         {user?.role === "admin" && !existCompany ? (
-          <DropdownItem key="singup">
+          <DropdownItem key="singup" textValue="cadastrar empresa">
             <Link to="/signup">Cadastrar Empresa</Link>
           </DropdownItem>
         ) : (
           <></>
         )}
         {user?.role === "admin" ? (
-          <DropdownItem key="managerUsers">
+          <DropdownItem key="managerUsers" textValue="gerenciar usuarios">
             <Link to="/admin/usermanagement">Gerenciar Usuarios</Link>
           </DropdownItem>
         ) : (
           <></>
         )}
         {user ? (
-          <DropdownItem key="logout" color="danger" onPress={handleLogout}>
-            Log Out
+          <DropdownItem key="logout" color="danger" onPress={handleLogout} textValue="sair">
+            Sair
           </DropdownItem>
         ) : (
-          <DropdownItem key="login" color="danger" onPress={handleLogin}>
-            Login
+          <DropdownItem key="login" color="danger" onPress={handleLogin} textValue="entrar">
+            Entrar
           </DropdownItem>
         )}
       </DropdownMenu>

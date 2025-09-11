@@ -117,7 +117,7 @@ export default function Financas() {
 
   return (
     <DefaultLayout>
-      <div className="py-6 space-y-8">
+      <div className="space-y-8">
         {/* Cards Resumo */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
