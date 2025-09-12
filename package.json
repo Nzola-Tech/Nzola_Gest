@@ -8,7 +8,7 @@
     "url": "https://github.com/Nzola/nzola-gest-farmacia.git"
   },
   "private": true,
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "scripts": {
     "tauri": "tauri",
