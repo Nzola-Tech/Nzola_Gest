@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.2](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.8.1...v0.8.2) (2025-09-12)
+
+
+### Bug Fixes
+
+* sync tags ([5232dd1](https://github.com/Nzola-Tech/nzola-gest-farm/commit/5232dd1cdfe3c7fc597a505959d48ded46201282))
+* sync tags ([520bef8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/520bef815b8bd80070b58fd480d418d52e15fd8e))
+
 ## [0.8.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.7.0...v0.8.0) (2025-09-01)
 
 
