@@ -15,7 +15,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync-version": "node sync-version.js",
+    "tauri:dev": "pnpm run sync-version && tauri dev",
+    "tauri:build": "pnpm run sync-version && tauri build"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
