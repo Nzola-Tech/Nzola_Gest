@@ -9,9 +9,7 @@ export default function DefaultLayout({
       <div className="relative flex flex-col">
         <main className="container w-full grid grid-cols-12">
           <SideBar />
-          <div className="col-span-10 pt-4">
-            {children}
-          </div>
+          <div className="col-span-10 pt-4">{children}</div>
         </main>
       </div>
     </>

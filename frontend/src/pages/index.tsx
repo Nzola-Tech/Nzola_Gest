@@ -16,7 +16,6 @@ import { invoicesOfTheDay, invoiceItems } from "@/services/pdv/invoice";
 import { Sale, SaleItem } from "@/types/pdv";
 import InvoiceModal from "@/components/home/invoiceModal";
 import DailyTopProductsChart from "@/components/charts/DailyTopProductsChart";
-import Financas from "./financas";
 
 export default function Home() {
   const [soldToday, setSoldToday] = useState(0);
@@ -47,66 +46,66 @@ export default function Home() {
   return (
     <>
       <DefaultLayout>
-          <SaleInfo soldToday={soldToday} totalSalesToday={totalSalesToday} />
-          <Layout>
-            <div className="overflow-auto col-span-3 shadow-lg px-2 py-4 rounded-t-lg dark:bg-default-100">
-              <div className="flex justify-between items-center">
-                <h1 className="font-bold uppercase">Faturas</h1>
-                <div className="flex items-center gap-x-2">
-                  <CalendarDaysIcon className="size-6" />
-                  <span>
-                    Hoje,{" "}
-                    {(() => {
-                      const data = new Date()
-                        .toLocaleDateString("pt-BR")
-                        .split("/");
+        <SaleInfo soldToday={soldToday} totalSalesToday={totalSalesToday} />
+        <Layout>
+          <div className="overflow-auto col-span-3 shadow-lg px-2 py-4 rounded-t-lg dark:bg-default-100">
+            <div className="flex justify-between items-center">
+              <h1 className="font-bold uppercase">Faturas</h1>
+              <div className="flex items-center gap-x-2">
+                <CalendarDaysIcon className="size-6" />
+                <span>
+                  Hoje,{" "}
+                  {(() => {
+                    const data = new Date()
+                      .toLocaleDateString("pt-BR")
+                      .split("/");
 
-                      return `${data[0]} ${data[2]}`;
-                    })()}
-                  </span>
-                </div>
+                    return `${data[0]} ${data[2]}`;
+                  })()}
+                </span>
               </div>
-              <ScrollShadow className="h-[400px] mt-8">
-                <Listbox aria-label="Action" color="primary">
-                  {invoices.length > 0 ? (
-                    invoices.map((invoice) => (
-                      <ListboxItem
-                        key={invoice.id}
-                        textValue={`Fatura ${invoice.id}`}
-                        onPress={async () => {
-                          if (!db) return;
-                          const itens = await invoiceItems(db, invoice.id);
+            </div>
+            <ScrollShadow className="h-[400px] mt-8">
+              <Listbox aria-label="Action" color="primary">
+                {invoices.length > 0 ? (
+                  invoices.map((invoice) => (
+                    <ListboxItem
+                      key={invoice.id}
+                      textValue={`Fatura ${invoice.id}`}
+                      onPress={async () => {
+                        if (!db) return;
+                        const itens = await invoiceItems(db, invoice.id);
 
-                          setSelectedInvoice({ ...invoice, itens });
-                        }}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span>
-                            Nº FR {new Date().getFullYear()}/{invoice.id}
-                          </span>
-                          <EyeIcon className="size-6 cursor-pointer text-blue-500 hover:text-blue-700" />
-                        </div>
-                      </ListboxItem>
-                    ))
-                  ) : (
-                    <ListboxItem>
-                      <h1 className="text-gray-400">Nenhuma fatura hoje</h1>
+                        setSelectedInvoice({ ...invoice, itens });
+                      }}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>
+                          Nº FR {new Date().getFullYear()}/{invoice.id}
+                        </span>
+                        <EyeIcon className="size-6 cursor-pointer text-blue-500 hover:text-blue-700" />
+                      </div>
                     </ListboxItem>
-                  )}
-                </Listbox>
-              </ScrollShadow>
-            </div>
-            <div className="overflow-auto col-start-4 col-span-10 shadow-xl rounded-t-lg dark:bg-default-100">
-              <DailyTopProductsChart />
-            </div>
-          </Layout>
-          {selectedInvoice && (
-            <InvoiceModal
-              fatura={selectedInvoice}
-              isOpen={true}
-              onClose={() => setSelectedInvoice(null)}
-            />
-          )}
+                  ))
+                ) : (
+                  <ListboxItem>
+                    <h1 className="text-gray-400">Nenhuma fatura hoje</h1>
+                  </ListboxItem>
+                )}
+              </Listbox>
+            </ScrollShadow>
+          </div>
+          <div className="overflow-auto col-start-4 col-span-10 shadow-xl rounded-t-lg dark:bg-default-100">
+            <DailyTopProductsChart />
+          </div>
+        </Layout>
+        {selectedInvoice && (
+          <InvoiceModal
+            fatura={selectedInvoice}
+            isOpen={true}
+            onClose={() => setSelectedInvoice(null)}
+          />
+        )}
       </DefaultLayout>
     </>
   );

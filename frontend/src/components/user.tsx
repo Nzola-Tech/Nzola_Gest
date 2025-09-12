@@ -46,7 +46,7 @@ export const UserIcon = () => {
           avatarProps={{
             src: "",
             size: "sm",
-            isBordered:true
+            isBordered: true,
           }}
           className="transition-transform"
           description={``}
@@ -54,7 +54,6 @@ export const UserIcon = () => {
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="light">
-        
         {user?.role === "admin" && !existCompany ? (
           <DropdownItem key="singup" textValue="cadastrar empresa">
             <Link to="/signup">Cadastrar Empresa</Link>
@@ -70,11 +69,21 @@ export const UserIcon = () => {
           <></>
         )}
         {user ? (
-          <DropdownItem key="logout" color="danger" onPress={handleLogout} textValue="sair">
+          <DropdownItem
+            key="logout"
+            color="danger"
+            textValue="sair"
+            onPress={handleLogout}
+          >
             Sair
           </DropdownItem>
         ) : (
-          <DropdownItem key="login" color="danger" onPress={handleLogin} textValue="entrar">
+          <DropdownItem
+            key="login"
+            color="danger"
+            textValue="entrar"
+            onPress={handleLogin}
+          >
             Entrar
           </DropdownItem>
         )}

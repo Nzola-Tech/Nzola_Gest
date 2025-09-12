@@ -8,7 +8,7 @@ import Clientes from "./pages/clientes";
 import Estoque from "./pages/estoque";
 import VendasPdv from "./pages/pdv";
 import Financas from "./pages/financas";
-import Settings from "./pages/settings"; "./pages/settings";
+import Settings from "./pages/settings";
 import { ContextProvider } from "./components/contextProvider";
 import Login from "./pages/login";
 import { useDbStore } from "./store/db-store";
