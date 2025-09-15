@@ -26,7 +26,7 @@ export default function Pdv() {
       <DefaultLayout>
         <div className="w-full h-[calc(106dvh-119px)] grid grid-cols-12 gap-4 overflow-y-hidden">
           <SellForm onEditQuantity={handleEditQuantity} />
-          <div className="overflow-auto col-start-5 col-span-10">
+          <div className="overflow-auto col-start-5 col-span-12">
             <ProductsTable />
           </div>
         </div>

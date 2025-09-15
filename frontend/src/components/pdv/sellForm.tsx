@@ -69,10 +69,9 @@ export const SellForm = ({ onEditQuantity }: SellFormProps) => {
 
   return (
     <Form className="overflow-auto col-span-4" onSubmit={handleSubmit}>
-      <div className="w-full grid grid-row-8 h-full">
+      <div className="w-full grid grid-row-12 h-full">
         <div className="relative bg-slate-100 dark:bg-zinc-800 dark:text-white p-4 rounded-t-3xl">
           <div>
-            <h1 className="font-bold text-lg">Nzola Gest Farmacia</h1>
             <p>Factura</p>
           </div>
           <div className="flex justify-between items-center">

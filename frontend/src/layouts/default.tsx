@@ -7,9 +7,9 @@ export default function DefaultLayout({
   return (
     <>
       <div className="relative flex flex-col">
-        <main className="container w-full grid grid-cols-12">
+        <main className="w-full grid grid-cols-12">
           <SideBar />
-          <div className="col-span-10 pt-4">{children}</div>
+          <div className="col-start-2 col-span-12 pt-4 pr-4">{children}</div>
         </main>
       </div>
     </>
