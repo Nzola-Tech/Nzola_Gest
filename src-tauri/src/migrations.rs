@@ -103,8 +103,8 @@ pub fn get_migrations() -> Vec<Migration> {
             sql: r#"
                 INSERT INTO users (username, password, role)
                 VALUES
-                    ('admin', 'admin123','admin'),
-                    ('adminReset', 'adminReset123','farmaceutico');
+                    ('admin', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin'),
+                    ('adminReset', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin');
             "#
             .into(),
             kind: MigrationKind::Up,
@@ -124,6 +124,50 @@ pub fn get_migrations() -> Vec<Migration> {
             "#
             .into(),
             kind: MigrationKind::Up,
-        }
+        },
+        Migration {
+            version: 9,
+            description: "add_missing_company_fields",
+            sql: r#"
+                ALTER TABLE company ADD COLUMN documentCode TEXT;
+                ALTER TABLE company ADD COLUMN regime TEXT;
+                ALTER TABLE company ADD COLUMN website TEXT;
+                ALTER TABLE company ADD COLUMN tradeRegister TEXT;
+                ALTER TABLE company ADD COLUMN province TEXT;
+                ALTER TABLE company ADD COLUMN municipality TEXT;
+                ALTER TABLE company ADD COLUMN street TEXT;
+                ALTER TABLE company ADD COLUMN neighborhood TEXT;
+                ALTER TABLE company ADD COLUMN building TEXT;
+                ALTER TABLE company ADD COLUMN logo TEXT;
+            "#
+            .into(),
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 10, // nova versão da migration
+            description: "drop_and_recreate_company",
+            sql: r#"
+                DROP TABLE IF EXISTS company;
+
+                CREATE TABLE company (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    email TEXT NOT NULL,
+                    documentCode TEXT,
+                    regime TEXT,
+                    nif TEXT NOT NULL,
+                    website TEXT,
+                    phone TEXT NOT NULL,
+                    tradeRegister TEXT,
+                    province TEXT,
+                    municipality TEXT,
+                    street TEXT,
+                    neighborhood TEXT,
+                    building TEXT,
+                    logo TEXT
+                );
+                "#.into(),
+                kind: MigrationKind::Up,
+            },
     ]
 }

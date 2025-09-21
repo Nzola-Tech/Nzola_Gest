@@ -18,6 +18,7 @@ import Signup from "./pages/signup";
 import UserManagement from "./pages/users";
 
 import Home from "@/pages/index";
+import Company from "./pages/company";
 
 function App() {
   const navigate = useNavigate();
@@ -97,6 +98,14 @@ function App() {
             path="/financas"
           />
           <Route element={<Settings />} path="/settings" />
+          <Route
+            element={
+              <ProtectedRoute allowedTypes={["admin"]}>
+                <Company />
+              </ProtectedRoute>
+            }
+            path="/company"
+          />
         </Routes>
       </HeroUIProvider>
     </ContextProvider>

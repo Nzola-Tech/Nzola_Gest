@@ -68,6 +68,13 @@ export const UserIcon = () => {
         ) : (
           <></>
         )}
+        {user?.role === "admin" ? (
+          <DropdownItem key="managerUsers" textValue="Empresa">
+            <Link to="/company">Empresa</Link>
+          </DropdownItem>
+        ) : (
+          <></>
+        )}
         {user ? (
           <DropdownItem
             key="logout"

@@ -51,6 +51,7 @@ export const useAuthStore = create<AuthState>()(
         const match = await bcrypt.compare(userData.password, hashArmazenado);
 
         if (!match) {
+          console.log("Senha incorreta");
           throw new Error("Usuário ou senha inválidos");
         }
 

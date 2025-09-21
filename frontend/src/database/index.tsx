@@ -139,11 +139,17 @@ export const existingCompany = async (db: Database | null) => {
 };
 
 export const insertCompany = async (db: Database | null, company: Company) => {
-  if (!db) return [];
-  const result = await db.execute(
-    "INSERT INTO company (name, nif, email, phone, location) VALUES ($1, $2, $3, $4, $5)",
-    [company.name, company.nif, company.email, company.phone, company.location],
-  );
+  if (!db) return false;
 
-  return result;
+  try {
+    const result = await db.execute(
+      "INSERT INTO company (name, nif, email, phone) VALUES (?, ?, ?, ?)",
+      [company.name, company.nif, company.email, company.phone]
+    );
+    
+    return result.rowsAffected > 0;
+  } catch (err) {
+    return false;
+  }
 };
+
