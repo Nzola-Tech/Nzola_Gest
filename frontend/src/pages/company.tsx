@@ -63,7 +63,7 @@ const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     setForm({ ...form, logo: base64 });
 
-    await db?.execute("UPDATE company SET logo_path = ? WHERE id = ?", [base64, form.id]);
+    await db?.execute("UPDATE company SET logo = ? WHERE id = ?", [base64, form.id]);
   }
 };
 
@@ -191,8 +191,8 @@ const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                   setField("regime", Array.from(keys)[0] as string)
                 }
               >
-                <SelectItem key="EXCLUSAO">REGIME DE EXCLUSÃO</SelectItem>
-                <SelectItem key="GERAL">REGIME GERAL</SelectItem>
+                <SelectItem key="EXCLUSAO" textValue="EXCLUSAO">REGIME DE EXCLUSÃO</SelectItem>
+                <SelectItem key="GERAL" textValue="GERAL">REGIME GERAL</SelectItem>
               </Select>
 
               <Input
