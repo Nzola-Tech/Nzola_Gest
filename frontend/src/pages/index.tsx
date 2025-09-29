@@ -66,7 +66,7 @@ export default function Home() {
               </div>
             </div>
             <ScrollShadow className="h-[400px] mt-8">
-              <Listbox aria-label="Action" color="primary">
+              <Listbox aria-label="Action" color="primary" >
                 {invoices.length > 0 ? (
                   invoices.map((invoice) => (
                     <ListboxItem
@@ -88,7 +88,7 @@ export default function Home() {
                     </ListboxItem>
                   ))
                 ) : (
-                  <ListboxItem>
+                  <ListboxItem textValue="Nenhuma fatura hoje">
                     <h1 className="text-gray-400">Nenhuma fatura hoje</h1>
                   </ListboxItem>
                 )}
