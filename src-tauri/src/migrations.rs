@@ -86,6 +86,9 @@ pub fn get_migrations() -> Vec<Migration> {
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
+                    name TEXT NOT NULL,
+                    surname TEXT NOT NULL,
+                    email TEXT NOT NULL UNIQUE,
                     password TEXT NOT NULL,
                     role TEXT NOT NULL DEFAULT 'user',
                     status TEXT NOT NULL DEFAULT 'inactive',
@@ -101,10 +104,10 @@ pub fn get_migrations() -> Vec<Migration> {
             version: 6,
             description: "seed_users",
             sql: r#"
-                INSERT INTO users (username, password, role)
+                INSERT INTO users (username, name, surname, email, password, role)
                 VALUES
-                    ('admin', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin'),
-                    ('adminReset', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin');
+                    ('admin', 'Admin', 'User', 'admin@example.com', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin'),
+                    ('adminReset', 'Admin', 'Reset', 'aldairandre99@gmail.com', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin');
             "#
             .into(),
             kind: MigrationKind::Up,

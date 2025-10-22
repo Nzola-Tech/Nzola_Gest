@@ -72,9 +72,8 @@ export default function Sidebar() {
               <Tooltip key={item.id} content={item.label} placement="right">
                 <Button
                   isIconOnly
-                  className={`transition-all duration-200 ${
-                    isActive ? "bg-green-600" : ""
-                  }`}
+                  className={`transition-all duration-200 ${isActive ? "bg-green-600" : ""
+                    }`}
                   variant="light"
                   onPress={() => navigate(item.href)}
                 >
@@ -86,6 +85,11 @@ export default function Sidebar() {
           <ThemeSwitch />
         </div>
         <UserIcon />
+        {
+          <div className="text-xs text-center px-2 text-red-700">
+            {user?.name} {user?.surname}
+          </div>
+        }
       </div>
     </div>
   );
