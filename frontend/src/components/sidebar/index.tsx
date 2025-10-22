@@ -85,11 +85,6 @@ export default function Sidebar() {
           <ThemeSwitch />
         </div>
         <UserIcon />
-        {
-          <div className="text-xs text-center px-2 text-red-700">
-            {user?.name} {user?.surname}
-          </div>
-        }
       </div>
     </div>
   );
