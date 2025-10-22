@@ -19,20 +19,23 @@ import UserManagement from "./pages/users";
 
 import Home from "@/pages/index";
 import Company from "./pages/company";
+import { useCompanyInfoStore } from "./store/companyInfo-store";
 
 function App() {
   const navigate = useNavigate();
   const { initDb } = useDbStore();
   const { checkAuth } = useAuthStore();
+  const fetchCompany = useCompanyInfoStore((s) => s.fetchCompany);
 
   useEffect(() => {
     const init = async () => {
       await initDb();
       await checkAuth();
+      await fetchCompany();
     };
 
     init();
-  }, [initDb]);
+  }, [initDb, checkAuth, fetchCompany]);
 
   return (
     <ContextProvider>
