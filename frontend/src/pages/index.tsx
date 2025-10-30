@@ -25,6 +25,7 @@ export default function Home() {
     (Sale & { itens: SaleItem[] }) | null
   >(null);
   const { db } = useDbStore();
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +67,7 @@ export default function Home() {
               </div>
             </div>
             <ScrollShadow className="h-[400px] mt-8">
-              <Listbox aria-label="Action" color="primary" >
+              <Listbox aria-label="Faturas" color="primary">
                 {invoices.length > 0 ? (
                   invoices.map((invoice) => (
                     <ListboxItem
@@ -74,21 +75,26 @@ export default function Home() {
                       textValue={`Fatura ${invoice.id}`}
                       onPress={async () => {
                         if (!db) return;
-                        const itens = await invoiceItems(db, invoice.id);
 
-                        setSelectedInvoice({ ...invoice, itens });
+                        try {
+                          const itens = await invoiceItems(db, invoice.id);
+                          setSelectedInvoice({ ...invoice, itens });
+                        } catch (error) {
+                          console.error('Erro ao carregar itens da fatura:', error);
+                          // Aqui você pode adicionar um toast ou notificação de erro
+                        }
                       }}
                     >
                       <div className="flex justify-between items-center">
                         <span>
-                          Nº FR {new Date().getFullYear()}/{invoice.id}
+                          Nº FR {currentYear}/{invoice.id}
                         </span>
                         <EyeIcon className="size-6 cursor-pointer text-blue-500 hover:text-blue-700" />
                       </div>
                     </ListboxItem>
                   ))
                 ) : (
-                  <ListboxItem textValue="Nenhuma fatura hoje">
+                  <ListboxItem key="empty" textValue="Nenhuma fatura hoje" isReadOnly>
                     <h1 className="text-gray-400">Nenhuma fatura hoje</h1>
                   </ListboxItem>
                 )}
