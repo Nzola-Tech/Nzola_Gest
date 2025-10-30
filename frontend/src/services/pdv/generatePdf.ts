@@ -28,6 +28,7 @@ export async function generatePDF(
       : new jsPDF({ unit: "mm", format, orientation: "portrait" });
 
   const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 10;
 
   // ====== CABEÇALHO ======
@@ -137,40 +138,44 @@ export async function generatePDF(
     },
   });
 
-  // ===== ESPAÇAMENTO PÓS-TABELA =====
-  const finalY = (doc as any).lastAutoTable.finalY + 100;
+  // ===== CALCULAR POSIÇÃO APÓS TABELA =====
+  let finalY = (doc as any).lastAutoTable.finalY + 10;
+
+  // ===== VERIFICAR SE HÁ ESPAÇO PARA RESUMO E RODAPÉ =====
+  const spaceNeeded = 85; // espaço necessário para resumo (35) + rodapé (50)
+  
+  if (finalY + spaceNeeded > pageHeight - margin) {
+    doc.addPage();
+    finalY = 20; // Começar do topo da nova página
+  }
+
+  // ===== LINHA SEPARADORA ANTES DO RESUMO =====
+  doc.setLineWidth(0.2);
+  doc.line(margin, finalY - 2, pageWidth - margin, finalY - 2);
 
   // ===== RESUMO =====
-  doc.setLineWidth(0.2);
-  doc.line(margin, 180, pageWidth - margin, 180);
   doc.setFont("helvetica", "normal");
-  doc.text("Total Ilíquido:", margin, finalY);
-  doc.text("Total Desconto:", margin, finalY + 5);
-  doc.text("Retenção:", margin, finalY + 10);
-  doc.text("Total Imposto:", margin, finalY + 15);
+  doc.setFontSize(format === "ticket" ? 7 : 9);
+  doc.text("Total Ilíquido:", margin, finalY + 5);
+  doc.text("Total Desconto:", margin, finalY + 10);
+  doc.text("Retenção:", margin, finalY + 15);
+  doc.text("Total Imposto:", margin, finalY + 20);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(format === "ticket" ? 9 : 12);
-  doc.text("Total Documento:", margin, finalY + 20);
+  doc.text("Total Documento:", margin, finalY + 25);
 
   doc.setFont("helvetica", "normal");
-  doc.text(`${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} KZ`, pageWidth - 35, finalY);
-  doc.text("0,00 KZ", pageWidth - 35, finalY + 5);
-  doc.text("0,00 KZ", pageWidth - 35, finalY + 10);
-  doc.text("0,00 KZ", pageWidth - 35, finalY + 15);
+  doc.setFontSize(format === "ticket" ? 7 : 9);
+  doc.text(`${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} KZ`, pageWidth - margin, finalY + 5, { align: "right" });
+  doc.text("0,00 KZ", pageWidth - margin, finalY + 10, { align: "right" });
+  doc.text("0,00 KZ", pageWidth - margin, finalY + 15, { align: "right" });
+  doc.text("0,00 KZ", pageWidth - margin, finalY + 20, { align: "right" });
   doc.setFont("helvetica", "bold");
   doc.setFontSize(format === "ticket" ? 9 : 12);
-  doc.text(`${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} KZ`, pageWidth - 35, finalY + 20);
-
-  // Valor por extenso
-  // doc.setFont("helvetica", "italic");
-  // doc.text(
-  //   total >= 1 ? `${Math.floor(total)} KWANZAS` : "ZERO KWANZAS",
-  //   margin,
-  //   finalY + 28
-  // );
+  doc.text(`${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} KZ`, pageWidth - margin, finalY + 25, { align: "right" });
 
   // ===== RODAPÉ =====
-  const footerY = finalY + 60;
+  const footerY = finalY + 40;
   doc.setFont("helvetica", "normal");
   doc.setFontSize(format === "ticket" ? 7 : 9);
   doc.text(
@@ -189,7 +194,7 @@ export async function generatePDF(
   // Mensagem final
   doc.setFont("helvetica", "bold");
   doc.setFontSize(format === "ticket" ? 8 : 10);
-  doc.text("Obrigado volte sempre!", pageWidth / 2, footerY + 28, { align: "center" });
+  doc.text("Obrigado volte sempre!", pageWidth / 2, footerY + 25, { align: "center" });
 
   return doc.output("bloburl").toString();
 }
