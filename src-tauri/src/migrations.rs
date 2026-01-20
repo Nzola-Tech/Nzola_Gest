@@ -172,5 +172,23 @@ pub fn get_migrations() -> Vec<Migration> {
                 "#.into(),
                 kind: MigrationKind::Up,
             },
+        Migration {
+            version: 11,
+            description: "add_discount_per_item_fields",
+            sql: r#"
+                -- sale_items: suporte a desconto por item
+                ALTER TABLE sale_items ADD COLUMN unit_price REAL;
+                ALTER TABLE sale_items ADD COLUMN discount_type TEXT;
+                ALTER TABLE sale_items ADD COLUMN discount_value REAL DEFAULT 0;
+                ALTER TABLE sale_items ADD COLUMN discount_amount REAL DEFAULT 0;
+                ALTER TABLE sale_items ADD COLUMN subtotal REAL;
+                ALTER TABLE sale_items ADD COLUMN total REAL;
+
+                -- sales: valores agregados (não altera lógica atual)
+                ALTER TABLE sales ADD COLUMN subtotal REAL;
+                ALTER TABLE sales ADD COLUMN discount_total REAL DEFAULT 0;
+            "#.into(),
+            kind: MigrationKind::Up,
+        },
     ]
 }
