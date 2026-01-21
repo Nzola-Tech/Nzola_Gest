@@ -6,16 +6,18 @@ import {
   DropdownTrigger,
 } from "@heroui/dropdown";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-
 import { CartItem } from "@/types/pdv";
 import { usePdvStore } from "@/store/pdv-store";
+import { calculateDiscountValue } from "@/utils/pdv";
 
 export const Product = ({
   item,
   onEditQuantity,
+  onEditDiscount,
 }: {
   item: CartItem;
   onEditQuantity: (id: number, quantity: number) => void;
+  onEditDiscount: (id: number) => void;
 }) => {
   const { removeFromCart, updateQuantity } = usePdvStore();
 
@@ -41,7 +43,12 @@ export const Product = ({
         </span>
       </div>
       <div className="flex flex-col items-center">
-        <span>0</span>
+        <span className="text-green-500">
+          {calculateDiscountValue(item).toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </span>
       </div>
       <Dropdown className="flex flex-col items-center">
         <DropdownTrigger>
@@ -72,6 +79,13 @@ export const Product = ({
             }}
           >
             Editar Quantidade
+          </DropdownItem>
+          <DropdownItem
+            key="edit-descount"
+            className="text-blue-500 hover:text-blue-700"
+            onPress={() => { onEditDiscount(item.id); }}
+          >
+            Desconto
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
