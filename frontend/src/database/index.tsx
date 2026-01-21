@@ -14,12 +14,14 @@ export async function fetchProducts(db: Database | null): Promise<Product[]> {
 export async function insertSale(
   db: Database,
   total: number,
-  payment: string,
   createdAt: string,
+  payment: string,
+  subtotal?: number,
+  discountTotal?: number,
 ) {
   const result = await db.execute(
-    "INSERT INTO sales (total, payment_method, created_at) VALUES ($1, $2, $3)",
-    [total, payment, createdAt],
+    "INSERT INTO sales (total, payment_method, created_at,subtotal, discount_total) VALUES ($1, $2, $3, $4, $5)",
+    [total, payment, createdAt, subtotal, discountTotal],
   );
 
   const { lastInsertId } = result;
@@ -30,22 +32,77 @@ export async function insertSale(
 }
 
 export async function insertSaleItemsAndUpdateStock(
-  db: any,
+  db: Database,
   saleId: number,
   cart: CartItem[],
   createdAt: string,
 ) {
   for (const item of cart) {
+    const unitPrice = item.unit_price ?? item.sale_price;
+    const quantity = item.quantity;
+
+    const subtotal = item.subtotal ?? unitPrice * quantity;
+
+    let discountAmount = item.discount_amount;
+
+    if (discountAmount == null) {
+      if (item.discount_type === "FIXED") {
+        discountAmount = Math.min(
+          item.discount_value ?? 0,
+          subtotal,
+        );
+      } else if (item.discount_type === "PERCENTAGE") {
+        discountAmount =
+          subtotal * ((item.discount_value ?? 0) / 100);
+      } else {
+        discountAmount = 0;
+      }
+    }
+
+    const total = item.total ?? Math.max(0, subtotal - discountAmount);
+
     await db.execute(
-      "INSERT INTO sale_items (sale_id, product_id, quantity, price, created_at) VALUES ($1, $2, $3, $4, $5)",
-      [saleId, item.id, item.quantity, item.sale_price, createdAt],
+      `
+      INSERT INTO sale_items (
+        sale_id,
+        product_id,
+        quantity,
+        price,
+        unit_price,
+        subtotal,
+        discount_type,
+        discount_value,
+        discount_amount,
+        total,
+        created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        saleId,
+        item.id,
+        quantity,
+        unitPrice, 
+        unitPrice,
+        subtotal,
+        item.discount_type ?? null,
+        item.discount_value ?? 0,
+        discountAmount,
+        total,
+        createdAt,
+      ],
     );
+
     await db.execute(
-      "UPDATE products SET stock_quantity = stock_quantity - $1 WHERE id = $2",
-      [item.quantity, item.id],
+      `
+      UPDATE products
+      SET stock_quantity = stock_quantity - ?
+      WHERE id = ?
+      `,
+      [quantity, item.id],
     );
   }
 }
+
 
 export async function productsSoldToday(db: Database | null) {
   const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
@@ -146,7 +203,7 @@ export const insertCompany = async (db: Database | null, company: Company) => {
       "INSERT INTO company (name, nif, email, phone) VALUES (?, ?, ?, ?)",
       [company.name, company.nif, company.email, company.phone]
     );
-    
+
     return result.rowsAffected > 0;
   } catch (err) {
     return false;
