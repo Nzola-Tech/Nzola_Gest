@@ -110,7 +110,7 @@ export async function generatePDF(
   autoTable(doc, {
     startY: topCliente + 20,
     head: [
-      ["CÓDIGO", "DESCRIÇÃO", "QTD.", "UND.", "P. UNITÁRIO", "DESCONTO%", "TAXA%", "TOTAL"],
+      ["CÓDIGO", "DESCRIÇÃO", "QTD.", "UND.", "P. UNITÁRIO", "DESCONTO%", "TOTAL"],
     ],
     body: cart.map((item) => [
       item.id?.toString() || "-",
@@ -118,23 +118,23 @@ export async function generatePDF(
       item.quantity.toString(),
       "UN",
       item.sale_price.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
-      "0",
-      "0",
-      (item.sale_price * item.quantity).toLocaleString("pt-BR", {
+      item.discount_value || "0",
+      (item.total ?? 0).toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
       }),
     ]),
     styles: { fontSize: format === "ticket" ? 7 : 8, cellPadding: 1.5 },
     headStyles: { fillColor: "#4EA4E6", halign: "center" },
+    tableWidth: "auto",
     columnStyles: {
-      0: { halign: "center", cellWidth: 20 },
-      1: { halign: "left", cellWidth: 60 },
-      2: { halign: "center", cellWidth: 12 },
-      3: { halign: "center", cellWidth: 12 },
-      4: { halign: "right", cellWidth: 22 },
-      5: { halign: "center", cellWidth: 18 },
-      6: { halign: "center", cellWidth: 15 },
-      7: { halign: "right", cellWidth: 22 },
+      0: { halign: "center" },
+      1: { halign: "left" },
+      2: { halign: "center" },
+      3: { halign: "center" },
+      4: { halign: "right" },
+      5: { halign: "center" },
+      6: { halign: "center" },
+      7: { halign: "right" },
     },
   });
 
