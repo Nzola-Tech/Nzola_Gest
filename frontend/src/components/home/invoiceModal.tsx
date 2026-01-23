@@ -44,6 +44,11 @@ export default function InvoiceModal({
           name: i.product_name,
           quantity: i.quantity,
           sale_price: i.price,
+          discount_amount: i.discount_amount,
+          discount_type: i.discount_type,
+          discount_value: i.discount_value,
+          subtotal: i.subtotal || undefined,
+          total: i.total || undefined,
         }));
 
         const pdf = await generatePDF(

@@ -49,10 +49,10 @@ export interface SaleItem {
   quantity: number;
   price: number;
   created_at: string;
-  unit_price?: number;
-  discount_type?: string | null;
-  discount_value?: number;
-  discount_amount?: number;
-  subtotal?: number | null;
-  total?: number | null;
+  discount_value: number;
+  discount_amount: number;
+  unit_price: number;
+  discount_type?: DiscountType | null;
+  subtotal: number | null;
+  total: number | null;
 }
