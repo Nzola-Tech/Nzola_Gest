@@ -20,6 +20,7 @@ import UserManagement from "./pages/users";
 import Home from "@/pages/index";
 import Company from "./pages/company";
 import { useCompanyInfoStore } from "./store/companyInfo-store";
+import ComingSoonPage from "./pages/building";
 
 function App() {
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ function App() {
             }
             path="/company"
           />
+          <Route element={<ComingSoonPage />} path="/building" />
         </Routes>
       </HeroUIProvider>
     </ContextProvider>
