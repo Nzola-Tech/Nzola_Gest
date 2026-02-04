@@ -54,8 +54,8 @@ export default function Sidebar() {
       label: "Vendas",
       icon: <ShoppingBagIcon className="size-6" />,
       children: [
-        { label: "Fatura", href: "/vendas" },
-        { label: "Fatura Recibo", href: "#" },
+        { label: "Fatura", href: "#" },
+        { label: "Fatura Recibo", href: "/vendas" },
         { label: "Performance", href: "#" },
         { label: "Orçamento", href: "#" },
       ],
