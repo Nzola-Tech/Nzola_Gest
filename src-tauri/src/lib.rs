@@ -3,12 +3,15 @@ mod commands;
 mod db;
 mod migrations;
 
-use tauri::Manager;
 use app_state::AppState;
 use db::mysql;
+use std::env;
+use tauri::Manager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    dotenvy::dotenv().ok();
+
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
@@ -25,19 +28,18 @@ pub fn run() {
             let handle = app.handle().clone();
 
             tauri::async_runtime::block_on(async move {
-                // 🔐 depois vamos mover isso para env
-                let database_url = "mysql://root:admin@localhost/nzola_gest";
+                let database_url = env::var("DATABASE_URL").expect("DATABASE_URL não definida");
 
-                let pool = mysql::connect(database_url).await;
+                let pool = mysql::connect(&database_url)
+                    .await
+                    .expect("Falha ao conectar no MySQL");
 
                 handle.manage(AppState { db: pool });
             });
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![
-            commands::health::health_check
-        ])
+        .invoke_handler(tauri::generate_handler![commands::health::health_check])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

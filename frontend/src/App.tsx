@@ -23,16 +23,23 @@ import { useCompanyInfoStore } from "./store/companyInfo-store";
 import ComingSoonPage from "./pages/building";
 import { invoke } from "@tauri-apps/api/core";
 
+const check = async () => {
+  try {
+    const res = await invoke("health_check");
+    console.log(res);
+  } catch (err) {
+    console.error("Erro:", err);
+  }
+};
+
 function App() {
   const navigate = useNavigate();
   const { initDb } = useDbStore();
   const { checkAuth } = useAuthStore();
   const fetchCompany = useCompanyInfoStore((s) => s.fetchCompany);
-
+  check();
   useEffect(() => {
     const init = async () => {
-      const response = await invoke<string>("health_check");
-      console.log(response);
       await initDb();
       await checkAuth();
       await fetchCompany();
