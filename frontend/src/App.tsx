@@ -21,6 +21,7 @@ import Home from "@/pages/index";
 import Company from "./pages/company";
 import { useCompanyInfoStore } from "./store/companyInfo-store";
 import ComingSoonPage from "./pages/building";
+import { invoke } from "@tauri-apps/api/core";
 
 function App() {
   const navigate = useNavigate();
@@ -30,6 +31,8 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
+      const response = await invoke<string>("health_check");
+      console.log(response);
       await initDb();
       await checkAuth();
       await fetchCompany();
