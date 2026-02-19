@@ -1,3 +1,4 @@
+// db/mysql.rs
 use sqlx::{mysql::MySqlPoolOptions, MySqlPool};
 
 pub async fn connect(database_url: &str) -> Result<MySqlPool, sqlx::Error> {
