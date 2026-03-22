@@ -12,6 +12,7 @@ pub mod repositories;
 pub mod domain_error;
 
 pub use sale_item::SaleItem;
+pub use sale::Sale;
 pub use domain_error::DomainError;
 pub use fiscal_profile::FiscalProfile;
 pub use company_partner::CompanyPartner;

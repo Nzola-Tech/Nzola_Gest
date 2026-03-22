@@ -3,12 +3,12 @@ use crate::domain::{DomainError, SaleItem};
 
 #[derive(Debug)]
 pub struct Sale {
-    pub id: Option<u64>,
-    pub items: Vec<SaleItem>,
-    pub subtotal: f64,
-    pub discount_total: f64,
-    pub total: f64,
-    pub payment_method: String,
+    id: Option<u64>,
+    user_id: Option<u64>,
+    subtotal: f64,
+    discount_total: f64,
+    total: f64,
+    payment_method: String,
 }
 
 impl Sale {
@@ -19,7 +19,7 @@ impl Sale {
 
         Ok(Self {
             id: None,
-            items: vec![],
+            user_id: None,
             subtotal: 0.0,
             discount_total: 0.0,
             total: 0.0,
@@ -31,6 +31,5 @@ impl Sale {
         self.subtotal += item.subtotal;
         self.discount_total += item.discount_amount;
         self.total += item.total;
-        self.items.push(item);
     }
 }
