@@ -1,6 +1,5 @@
 //File: src-tauri/src/infrastructure/mysql_product_repository.rs
 
-use crate::application::dto::product_response_dto::ProductResponseDTO;
 use crate::domain::product::Product;
 use crate::domain::repositories::product_repository::ProductRepository;
 use sqlx::MySqlPool;
@@ -38,10 +37,10 @@ impl ProductRepository for MySqlProductRepository {
         Ok(id)
     }
 
-    async fn find_all(&self) -> Result<Vec<ProductResponseDTO>, String> {
+    async fn find_all(&self) -> Result<Vec<Product>, String> {
         let rows = sqlx::query!(
             r#"
-            SELECT id, name, product_type, stock_quantity, sale_price
+            SELECT id, name, stock_quantity, sale_price
             FROM products
             "#
         )
@@ -61,7 +60,7 @@ impl ProductRepository for MySqlProductRepository {
                 .unwrap();
 
                 product.set_id(row.id as u64);
-                ProductResponseDTO::from(product)
+                product
             })
             .collect();
 
@@ -71,7 +70,7 @@ impl ProductRepository for MySqlProductRepository {
     async fn find_by_id(&self, id: u64) -> Result<Option<Product>, String> {
         let row = sqlx::query!(
             r#"
-            SELECT id, name, product_type, stock_quantity, sale_price
+            SELECT id, name, stock_quantity, sale_price
             FROM products
             WHERE id = ?
             "#,

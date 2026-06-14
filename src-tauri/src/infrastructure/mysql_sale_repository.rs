@@ -1,3 +1,4 @@
+// src/infrastructure/mysql_sale_repository.rs
 use crate::domain::repositories::sale_repository::SaleRepository;
 use crate::domain::{Sale, SaleItem};
 use sqlx::{MySql, MySqlPool, Transaction};
@@ -24,7 +25,7 @@ impl SaleRepository for MySqlSaleRepository {
             sale.total,
             sale.payment_method
         )
-        .execute(&mut tx)
+        .execute(&mut *tx)
         .await
         .map_err(|e| e.to_string())?;
 
@@ -55,7 +56,7 @@ impl SaleRepository for MySqlSaleRepository {
                 item.subtotal,
                 item.total
             )
-            .execute(&mut tx)
+            .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?;
 
@@ -70,7 +71,7 @@ impl SaleRepository for MySqlSaleRepository {
                 item.product_id,
                 item.quantity
             )
-            .execute(&mut tx)
+            .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?
             .rows_affected();
@@ -79,6 +80,53 @@ impl SaleRepository for MySqlSaleRepository {
                 return Err("Stock insuficiente".into());
             }
         }
+
+        tx.commit().await.map_err(|e| e.to_string())?;
+
+        Ok(())
+    }
+
+    async fn cancel(&self, sale_id: u64) -> Result<(), String> {
+        let mut tx: Transaction<MySql> = self.pool.begin().await.map_err(|e| e.to_string())?;
+
+        // Get sale items to restore stock
+        let items = sqlx::query_as::<_, (u64, i32)>(
+            r#"
+            SELECT product_id, quantity FROM sale_items WHERE sale_id = ?
+            "#
+        )
+        .bind(sale_id)
+        .fetch_all(&mut *tx)
+        .await
+        .map_err(|e| e.to_string())?;
+
+        // Restore stock for each item
+        for (product_id, quantity) in items {
+            sqlx::query!(
+                r#"
+                UPDATE products
+                SET stock_quantity = stock_quantity + ?
+                WHERE id = ?
+                "#,
+                quantity,
+                product_id
+            )
+            .execute(&mut *tx)
+            .await
+            .map_err(|e| e.to_string())?;
+        }
+
+        // Delete sale items
+        sqlx::query!("DELETE FROM sale_items WHERE sale_id = ?", sale_id)
+            .execute(&mut *tx)
+            .await
+            .map_err(|e| e.to_string())?;
+
+        // Delete sale
+        sqlx::query!("DELETE FROM sales WHERE id = ?", sale_id)
+            .execute(&mut *tx)
+            .await
+            .map_err(|e| e.to_string())?;
 
         tx.commit().await.map_err(|e| e.to_string())?;
 

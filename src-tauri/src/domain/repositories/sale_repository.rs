@@ -1,7 +1,7 @@
-use async_trait::async_trait;
+// src-tauri/src/domain/repositories/sale_repository.rs
 use crate::domain::{Sale, SaleItem};
 
-#[async_trait]
+#[async_trait::async_trait]
 pub trait SaleRepository: Send + Sync {
     async fn create(
         &self,

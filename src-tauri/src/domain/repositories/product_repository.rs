@@ -6,7 +6,7 @@ use crate::{application::dto::product_response_dto::ProductResponseDTO, domain::
 pub trait ProductRepository: Send + Sync {
     async fn save(&self, product: &mut Product) -> Result<u64, String>;
     async fn find_by_id(&self, id: u64) -> Result<Option<Product>, String>;
-    async fn find_all(&self) -> Result<Vec<ProductResponseDTO>, String>;
+    async fn find_all(&self) -> Result<Vec<Product>, String>;
     async fn update(&self, product: &Product) -> Result<(), String>;
     async fn delete(&self, id: u64) -> Result<(), String>;
 }

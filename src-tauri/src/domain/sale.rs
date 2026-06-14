@@ -1,14 +1,15 @@
 // domain/sale.rs
 use crate::domain::{DomainError, SaleItem};
+use bigdecimal::BigDecimal;
 
 #[derive(Debug)]
 pub struct Sale {
-    id: Option<u64>,
-    user_id: Option<u64>,
-    subtotal: f64,
-    discount_total: f64,
-    total: f64,
-    payment_method: String,
+    pub id: Option<u64>,
+    pub user_id: Option<u64>,
+    pub subtotal: BigDecimal,
+    pub discount_total: BigDecimal,
+    pub total: BigDecimal,
+    pub payment_method: String,
 }
 
 impl Sale {
@@ -20,9 +21,9 @@ impl Sale {
         Ok(Self {
             id: None,
             user_id: None,
-            subtotal: 0.0,
-            discount_total: 0.0,
-            total: 0.0,
+            subtotal: BigDecimal::from(0),
+            discount_total: BigDecimal::from(0),
+            total: BigDecimal::from(0),
             payment_method,
         })
     }

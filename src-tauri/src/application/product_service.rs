@@ -31,7 +31,9 @@ impl<R: ProductRepository> ProductService<R> {
     }
 
     pub async fn list_products(&self) -> Result<Vec<ProductResponseDTO>, String> {
-        self.repository.find_all().await
+        self.repository.find_all().await.map(|products| {
+            products.into_iter().map(ProductResponseDTO::from).collect()
+        })
     }
 
     pub async fn get_product(&self, id: u64) -> Result<Option<Product>, String> {
