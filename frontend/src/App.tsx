@@ -27,7 +27,7 @@ function App() {
   const { initDb } = useDbStore();
   const { checkAuth } = useAuthStore();
   const fetchCompany = useCompanyInfoStore((s) => s.fetchCompany);
-
+  
   useEffect(() => {
     const init = async () => {
       await initDb();
