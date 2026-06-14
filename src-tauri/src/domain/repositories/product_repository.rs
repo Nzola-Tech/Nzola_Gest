@@ -1,6 +1,6 @@
 //File: src-tauri/src/domain/repositories/product_repository.rs
 
-use crate::{application::dto::product_response_dto::ProductResponseDTO, domain::product::Product};
+use crate::{domain::product::Product};
 
 #[async_trait::async_trait]
 pub trait ProductRepository: Send + Sync {
