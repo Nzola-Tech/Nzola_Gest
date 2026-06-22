@@ -5,6 +5,9 @@ export type UserStatus = "active" | "inactive" | "blocked";
 export interface User {
   id?: number;
   username: string;
+  name: string;
+  surname: string;
+  email: string;
   password: string;
   role?: UserRole;
   status?: UserStatus;

@@ -1,0 +1,17 @@
+# source: ./compose.yaml
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: nzolagest_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

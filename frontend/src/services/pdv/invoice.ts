@@ -27,6 +27,11 @@ export async function invoiceItems(
             si.quantity,
             si.price,
             si.created_at,
+            si.discount_value,
+            si.discount_type,
+            si.discount_amount,
+            si.subtotal,
+            si.total,
             p.name AS product_name
      FROM sale_items si
      JOIN products p ON p.id = si.product_id
@@ -36,3 +41,38 @@ export async function invoiceItems(
 
   return result as SaleItem[];
 }
+
+
+/* export async function invoiceItems(
+  db: Database | null,
+  saleId: number,
+): Promise<SaleItem[]> {
+  if (!db) return [];
+
+  const result = await db.select(
+    `
+    SELECT
+      si.id,
+      si.sale_id,
+      si.product_id,
+      p.name AS product_name,
+
+      si.quantity,
+      si.unit_price,
+      si.subtotal,
+
+      si.discount_type,
+      si.discount_value,
+      si.discount_amount,
+
+      si.total,
+      si.created_at
+    FROM sale_items si
+    JOIN products p ON p.id = si.product_id
+    WHERE si.sale_id = ?
+    `,
+    [saleId],
+  );
+
+  return result as SaleItem[];
+} */

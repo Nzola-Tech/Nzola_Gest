@@ -18,20 +18,25 @@ import Signup from "./pages/signup";
 import UserManagement from "./pages/users";
 
 import Home from "@/pages/index";
+import Company from "./pages/company";
+import { useCompanyInfoStore } from "./store/companyInfo-store";
+import ComingSoonPage from "./pages/building";
 
 function App() {
   const navigate = useNavigate();
   const { initDb } = useDbStore();
   const { checkAuth } = useAuthStore();
-
+  const fetchCompany = useCompanyInfoStore((s) => s.fetchCompany);
+  
   useEffect(() => {
     const init = async () => {
       await initDb();
       await checkAuth();
+      await fetchCompany();
     };
 
     init();
-  }, [initDb]);
+  }, [initDb, checkAuth, fetchCompany]);
 
   return (
     <ContextProvider>
@@ -97,6 +102,15 @@ function App() {
             path="/financas"
           />
           <Route element={<Settings />} path="/settings" />
+          <Route
+            element={
+              <ProtectedRoute allowedTypes={["admin"]}>
+                <Company />
+              </ProtectedRoute>
+            }
+            path="/company"
+          />
+          <Route element={<ComingSoonPage />} path="/building" />
         </Routes>
       </HeroUIProvider>
     </ContextProvider>

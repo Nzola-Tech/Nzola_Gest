@@ -86,6 +86,9 @@ pub fn get_migrations() -> Vec<Migration> {
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
+                    name TEXT NOT NULL,
+                    surname TEXT NOT NULL,
+                    email TEXT NOT NULL UNIQUE,
                     password TEXT NOT NULL,
                     role TEXT NOT NULL DEFAULT 'user',
                     status TEXT NOT NULL DEFAULT 'inactive',
@@ -101,10 +104,10 @@ pub fn get_migrations() -> Vec<Migration> {
             version: 6,
             description: "seed_users",
             sql: r#"
-                INSERT INTO users (username, password, role)
+                INSERT INTO users (username, name, surname, email, password, role)
                 VALUES
-                    ('admin', 'admin123','admin'),
-                    ('adminReset', 'adminReset123','farmaceutico');
+                    ('admin', 'Admin', 'User', 'admin@example.com', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin'),
+                    ('adminReset', 'Admin', 'Reset', 'aldairandre99@gmail.com', '$2b$10$Go1qmK3kb7qqsrTDYuYttO1cEcot1I5GkSbfTvwgAwqFZEMIvTa0q','admin');
             "#
             .into(),
             kind: MigrationKind::Up,
@@ -124,6 +127,68 @@ pub fn get_migrations() -> Vec<Migration> {
             "#
             .into(),
             kind: MigrationKind::Up,
-        }
+        },
+        Migration {
+            version: 9,
+            description: "add_missing_company_fields",
+            sql: r#"
+                ALTER TABLE company ADD COLUMN documentCode TEXT;
+                ALTER TABLE company ADD COLUMN regime TEXT;
+                ALTER TABLE company ADD COLUMN website TEXT;
+                ALTER TABLE company ADD COLUMN tradeRegister TEXT;
+                ALTER TABLE company ADD COLUMN province TEXT;
+                ALTER TABLE company ADD COLUMN municipality TEXT;
+                ALTER TABLE company ADD COLUMN street TEXT;
+                ALTER TABLE company ADD COLUMN neighborhood TEXT;
+                ALTER TABLE company ADD COLUMN building TEXT;
+                ALTER TABLE company ADD COLUMN logo TEXT;
+            "#
+            .into(),
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 10, // nova versão da migration
+            description: "drop_and_recreate_company",
+            sql: r#"
+                DROP TABLE IF EXISTS company;
+
+                CREATE TABLE company (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    email TEXT NOT NULL,
+                    documentCode TEXT,
+                    regime TEXT,
+                    nif TEXT NOT NULL,
+                    website TEXT,
+                    phone TEXT NOT NULL,
+                    tradeRegister TEXT,
+                    province TEXT,
+                    municipality TEXT,
+                    street TEXT,
+                    neighborhood TEXT,
+                    building TEXT,
+                    logo TEXT
+                );
+                "#.into(),
+                kind: MigrationKind::Up,
+            },
+        Migration {
+            version: 11,
+            description: "add_discount_per_item_fields",
+            sql: r#"
+                -- sale_items: suporte a desconto por item
+                ALTER TABLE sale_items ADD COLUMN unit_price REAL;
+                ALTER TABLE sale_items ADD COLUMN discount_type TEXT;
+                ALTER TABLE sale_items ADD COLUMN discount_value REAL DEFAULT 0;
+                ALTER TABLE sale_items ADD COLUMN discount_amount REAL DEFAULT 0;
+                ALTER TABLE sale_items ADD COLUMN subtotal REAL;
+                ALTER TABLE sale_items ADD COLUMN total REAL;
+
+                -- sales: valores agregados (não altera lógica atual)
+                ALTER TABLE sales ADD COLUMN subtotal REAL;
+                ALTER TABLE sales ADD COLUMN discount_total REAL DEFAULT 0;
+            "#.into(),
+            kind: MigrationKind::Up,
+        },
     ]
 }

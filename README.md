@@ -1,50 +1,105 @@
-# Vite & HeroUI Template
+# 🏥 Nzola Gest
 
-This is a template for creating applications using Vite and HeroUI (v2).
+**Nzola Gest** is a desktop management system designed to support business operations in a simple, fast, and reliable way.
 
-[Try it on CodeSandbox](https://githubbox.com/frontio-ai/vite-template)
+It is built with a modern full-stack architecture using **Rust (Tauri)** for the backend, **Vite + TypeScript** for the frontend, and **MySQL (Docker)** for data persistence.
 
-## Technologies Used
+---
 
-- [Vite](https://vitejs.dev/guide/)
-- [HeroUI](https://heroui.com)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
+## 🎯 Purpose
 
-## How to Use
+The goal of Nzola Gest is to provide an efficient system for managing:
 
-To clone the project, run the following command:
+- 📦 Products and inventory
+- 💰 Sales and transactions
+- 📊 Business operations and reporting
+- 👤 Users and access control (future feature)
 
-```bash
-git clone https://github.com/frontio-ai/vite-template.git
+---
+
+## ⚙️ Key Features
+
+- ⚡ Fast desktop application (Tauri)
+- 🧱 Clean architecture backend in Rust
+- 🐳 Containerized MySQL database
+- 🔄 Database migrations with SQLx
+- 📱 Modern and responsive UI (Vite + TypeScript)
+
+---
+
+## 🧠 Philosophy
+
+Nzola Gest is designed with simplicity, performance, and scalability in mind, focusing on real-world business needs while keeping the system lightweight and maintainable.
+
+---
+
+## 🚀 Status
+
+This project is currently in active development and evolving towards a complete production-ready management system.
+
+## 🚀 Overview
+
+This project provides:
+- ⚛️ React (Frontend)
+- 🐳 MySQL database running in Docker
+- 🦀 Rust backend (clean architecture)
+- 🧱 SQLx migrations system
+- ⚙️ Environment-based configuration (`.env`)
+- 🔄 Reproducible development environment
+
+---
+
+## 📦 Tech Stack
+
+- Typescript
+- Tailwind Css
+- Rust (Backend)
+- SQLx (ORM + Migrations)
+- MySQL 8.0
+- Docker & Docker Compose
+- dotenv (.env configuration)
+
+---
+
+# 🐳 Database configuration
+
+⚙️ Environment Setup
+
+Create a .env file in the root directory:
+
+- MYSQL_DATABASE=nzola_gest
+- MYSQL_USER=root
+- MYSQL_ROOT_PASSWORD=root
+
+- PMA_HOST=db
+
+- APP_PORT=8080
+- DB_PORT=3306
+
+- DATABASE_URL=mysql://root:root@localhost:3306/nzola_gest
+
+# 💻 Run in Development Mode
+
+Start the full Tauri app in dev mode:
+
+Start MySQL container:
+
+```
+    docker compose up -d
 ```
 
-### Install dependencies
+# 🧱 Run Migrations
 
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+Apply database migrations:
 
-```bash
-npm install
+```
+    sqlx migrate run
 ```
 
-### Run the development server
+# 💻 Run in Development Mode
 
-```bash
-npm run dev
+Start the full Tauri app in dev mode:
+
 ```
-
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
-
-```bash
-public-hoist-pattern[]=*@heroui/*
+    pnpm tauri:dev
 ```
-
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
-
-## License
-
-Licensed under the [MIT license](https://github.com/frontio-ai/vite-template/blob/main/LICENSE).

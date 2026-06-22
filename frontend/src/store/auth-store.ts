@@ -8,7 +8,7 @@ import { useDbStore } from "./db-store";
 import { User } from "@/types/signup/index";
 
 interface AuthState {
-  user: Pick<User, "id" | "username" | "role" | "status"> | null;
+  user: Pick<User, "id" | "username" | "role" | "status" | "name" | "surname" | "email"> | null;
   loading: boolean;
   login: (userData: User) => Promise<void | boolean>;
   logout: () => Promise<void>;
@@ -51,6 +51,7 @@ export const useAuthStore = create<AuthState>()(
         const match = await bcrypt.compare(userData.password, hashArmazenado);
 
         if (!match) {
+          console.log("Senha incorreta");
           throw new Error("Usuário ou senha inválidos");
         }
 
@@ -66,8 +67,11 @@ export const useAuthStore = create<AuthState>()(
           await store.set("user", {
             id: user[0].id,
             username: user[0].username,
+            name: user[0].name,
+            surname: user[0].surname,
             role: user[0].role,
             status: "active",
+            email: user[0].email,
           });
           await store.save();
 
@@ -75,8 +79,11 @@ export const useAuthStore = create<AuthState>()(
             user: {
               id: user[0].id,
               username: user[0].username,
+              name: user[0].name,
+              surname: user[0].surname,
               role: user[0].role,
               status: "active",
+              email: user[0].email,
             },
             loading: false,
           });

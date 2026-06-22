@@ -9,35 +9,34 @@ import { Select, SelectItem } from "@heroui/select";
 import { useEffect, useState } from "react";
 import { Form } from "@heroui/form";
 import { NumberInput } from "@heroui/number-input";
-
 import { Product } from "./product";
-
 import { paymentOptions, SellFormProps } from "@/types/pdv";
 import { useDbStore } from "@/store/db-store";
 import { usePdvStore } from "@/store/pdv-store";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
+import { calculateDiscountValue, calculateItemTotal } from "@/utils/pdv";
 
-export const SellForm = ({ onEditQuantity }: SellFormProps) => {
+export const SellForm = ({ onEditQuantity, onEditDiscount }: SellFormProps) => {
   const { db, refreshProducts } = useDbStore();
   const { cart, setCart, setSelectedKeys, payment, changePayment } =
     usePdvStore();
   const [totalPayment, setTotalPayment] = useState(0);
   const [paymentError, setPaymentError] = useState(false);
   const total = cart.reduce(
-    (sum, item) => sum + item.sale_price * item.quantity,
+    (sum, item) => sum + calculateItemTotal(item),
     0,
   );
   const troco =
     totalPayment >= total
       ? Math.max(0, totalPayment - total).toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
       : "0,00";
 
   useEffect(() => {
     setTotalPayment(
-      cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0),
+      cart.reduce((sum, item) => sum + calculateItemTotal(item), 0),
     );
   }, [cart]);
 
@@ -51,13 +50,30 @@ export const SellForm = ({ onEditQuantity }: SellFormProps) => {
     }
     const selectedPayment = [...payment][0].toString();
     const now = new Date().toISOString();
-    //const pdfUrl = generatePDF(cart, total, selectedPayment, "00001", {
-    //  name: "Cliente Teste",
-    //  nif: "123456789",
-    //});
-    //window.open(pdfUrl, "_blank");
 
-    const saleId = await insertSale(db, total, selectedPayment.toString(), now);
+    const saleSubtotal = cart.reduce(
+      (sum, item) => sum + item.sale_price * item.quantity,
+      0,
+    );
+
+    const saleDiscountTotal = cart.reduce(
+      (sum, item) => sum + calculateDiscountValue(item),
+      0,
+    );
+
+    const saleTotal = cart.reduce(
+      (sum, item) => sum + calculateItemTotal(item),
+      0,
+    );
+    const saleId = await insertSale(
+      db,
+      saleTotal,
+      now,               
+      selectedPayment,
+      saleSubtotal,
+      saleDiscountTotal,
+    );
+
 
     await insertSaleItemsAndUpdateStock(db, saleId, cart, now);
 
@@ -69,10 +85,9 @@ export const SellForm = ({ onEditQuantity }: SellFormProps) => {
 
   return (
     <Form className="overflow-auto col-span-4" onSubmit={handleSubmit}>
-      <div className="w-full grid grid-row-8 h-full">
+      <div className="w-full grid grid-row-12 h-full">
         <div className="relative bg-slate-100 dark:bg-zinc-800 dark:text-white p-4 rounded-t-3xl">
           <div>
-            <h1 className="font-bold text-lg">Nzola Gest Farmacia</h1>
             <p>Factura</p>
           </div>
           <div className="flex justify-between items-center">
@@ -112,6 +127,7 @@ export const SellForm = ({ onEditQuantity }: SellFormProps) => {
                   key={item.id}
                   item={item}
                   onEditQuantity={onEditQuantity}
+                  onEditDiscount={onEditDiscount}
                 />
               ))
             )}
